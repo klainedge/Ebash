@@ -20,7 +20,7 @@ namespace Diceroller.Controllers
 
         public IActionResult Index()
         {
-            ViewData["roller"] = "Случайный бросок 3d6";
+            ViewData["roller"] = "Случайный бросок 3d6 (не сохраняется)";
             var rand = new Random();
             var Otvet = new DiceValues();
             Otvet.Result = new List<int> { rand.Next(1, 7), rand.Next(1, 7), rand.Next(1, 7) };
@@ -32,6 +32,7 @@ namespace Diceroller.Controllers
 
         public IActionResult Roll(int Q, int E)
         {
+            ViewData["roller"] = $"Ваш случайный бросок {Q}d{E} (сохранён)";
             float S = (Q * ((float)(E + 1) / 2));
             var rand = new Random();
             var Otvet = new DiceValues();
@@ -51,7 +52,7 @@ namespace Diceroller.Controllers
             }
             Otvet.Result = Drop;
             Otvet.Shas = DateTime.Now;
-            Otvet.Avg = $"Получилось {Summa}. {S} – среднее значение выпадения при количестве кубиков {Q} и количестве граней {E} (с округлением вниз)";
+            Otvet.Avg = $"Получилось {Summa}. {S} – среднее значение выпадения при количестве кубиков {Q} и количестве граней {E}";
             Otvet.Q = Q;
             Otvet.E = E;
             return View("Index", Otvet);
@@ -61,6 +62,16 @@ namespace Diceroller.Controllers
         {
             return View();
         }
+
+        public IActionResult RollList()
+        {
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                var fromSQL = db.DiceDB.ToList();
+                return View(fromSQL);
+            }
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

@@ -1,0 +1,26 @@
+﻿@model List<toSQL>
+@{
+    ViewData["Title"] = "DB search";
+}
+<h1>@ViewData["Title"]</h1>
+
+<label>@ViewData["fromDB"]</label>
+<table spacing="5" style="border: 2 px; margin: 5px auto; width: 100%;">
+    <tr>
+            <td>Номер броска</td>
+            <td>Результат</td>
+            <td>Граней у кости</td>
+            <td>Костей в броске</td>
+            <td>Дата броска</td>
+    </tr>
+    @foreach (var fromDB in Model)
+    {
+        <tr>
+            <td>@fromDB.Id</td>
+            <td>@fromDB.RollResult</td>
+            <td>@fromDB.EdgeCount</td>
+            <td>@fromDB.DiceInRoll</td>
+            <td>@fromDB.RollTime</td>
+        </tr>
+    }
+</table>
