@@ -15,15 +15,15 @@
     <p>@Model.Shas</p>
     <p>@Model.Avg</p>
     <form method="POST" action="/Home/Roll">
-        <div style="        margin: 0 0 10px 0;">
+        <div style="margin: 0 0 10px 0;">
             <p>Количество кубиков</p>
             <input type="number" maxlength="3" value=@Model.Q name="Q">
         </div>
-        <div style="        margin: 0 0 10px 0;">
+        <div style="margin: 0 0 10px 0;">
             <p>Количество граней</p>
             <input type="number" maxlength="3" value=@Model.E name="E">
         </div>
-        <div style="        margin: 0 0 10px 0;">
+        <div style="margin: 0 0 10px 0;">
             <input type="submit" value="Бросок">
         </div>
     </form>
