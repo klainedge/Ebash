@@ -7,21 +7,49 @@
     <h1 class="display-4">Анохин Максим</h1>
     <p>Кидалка кубиков, собранная на <a href="https://docs.microsoft.com/aspnet/core">ASP.NET Core</a>.</p>
     <label>@ViewData["roller"]</label>
+    <Table style="font-size: 3vw; margin: auto; width: 100%;"> 
+        <tr>
+            @{
+                double Counter = 0;
+                double J = 0;
+                double Ji = 0;
+                    foreach (int siir in Model.Result)
+                {
 
-    @foreach (int siir in Model.Result)
-    {
-        <p>@siir</p>
-    }
+                    Counter++;
+                    J = (Counter + Ji) % 2 ;
+                        if (J != 1)
+                    {
+                        <td style="border: 2px solid gray; color: red; width: 9%">@siir</td>
+                    }
+                    else
+                    {
+                        <td style="border: 2px solid gray;  width: 9%">@siir</td>
+                    }
+                    if (Counter > 9)
+                    {
+                        Counter -= 10;
+                        Ji++;
+                    @:</tr><tr>
+                    }
+                }
+            }
+        </tr>
+    </Table>
     <p>@Model.Shas</p>
     <p>@Model.Avg</p>
     <form method="POST" action="/Home/Roll">
         <div style="margin: 0 0 10px 0;">
             <p>Количество кубиков</p>
-            <input type="number" maxlength="3" value=@Model.Q name="Q">
+            <input type="number" max="999" min="1" maxlength="3" value="@Model.Q" name="Q">
         </div>
         <div style="margin: 0 0 10px 0;">
             <p>Количество граней</p>
-            <input type="number" maxlength="3" value=@Model.E name="E">
+            <input type="number" max="999" min="2" maxlength="3" value="@Model.E" name="E">
+        </div>
+        <div style="margin: 0 0 10px 0;">
+            <p>Имя игрока</p>
+            <input type="text" value="@Model.Player" maxlength="16" name="Igrok">
         </div>
         <div style="margin: 0 0 10px 0;">
             <input type="submit" value="Бросок">

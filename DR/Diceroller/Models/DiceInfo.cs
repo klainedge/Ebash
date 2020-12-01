@@ -12,6 +12,7 @@ namespace Diceroller.Models
         public string Avg;
         public int Q;
         public int E;
+        public string Player;
     }
 }
     public class toSQL
@@ -22,4 +23,5 @@ namespace Diceroller.Models
         public int EdgeCount { get; set; }
         public DateTime RollTime{ get; set; }
         public int DiceInRoll { get; set; }
+        public string Player { get; set; }
 }
