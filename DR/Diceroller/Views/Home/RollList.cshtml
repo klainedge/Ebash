@@ -1,28 +1,47 @@
-﻿@model List<toSQL>
+﻿@model List<ToSQL>
 @{
-    ViewData["Title"] = "100 последних бросков";
+    ViewData["Title"] = "База данных бросков";
 }
-<h1>@ViewData["Title"]</h1>
-
-<label>@ViewData["fromDB"]</label>
-<table spacing="5" style="border: 2px; margin: 5px auto; width: 100%;">
-        <tr>
-            <td>Номер броска</td>
-            <td>Результат</td>
-            <td>Граней у кости</td>
-            <td>Костей в броске</td>
-            <td>Дата броска</td>
-            <td>Имя игрока</td>
-        </tr>
-    @foreach (var fromDB in Model)
-     {
-        <tr>
-            <td>@fromDB.Id</td>
-            <td>@fromDB.RollResult</td>
-            <td>@fromDB.EdgeCount</td>
-            <td>@fromDB.DiceInRoll</td>
-            <td>@fromDB.RollTime</td>
-            <td>@fromDB.Player</td>
-        </tr>
-     }
-</table>
+<a name="top"></a>
+<h1>Показано @ViewData["RollsperPage"] бросков из @ViewData["Count"]</h1>
+    <form method="Post" action="/Home/RollList">
+        <div>
+            <input type="number" min="1" max=@ViewData["LastPage"] value=@ViewData["CurrentPage"] maxlength="16" name="SkipPages" style="margin: 0; width: 190px;">
+            <input type="submit" value="К указанной странице" style="margin: 0 15px 0 10px; width: 190px;">
+            <input type="number" min="1" max="@ViewData["Count"]" value=@ViewData["RollsperPage"] maxlength="16" name="RollsperPage" style="margin: 0; width: 190px;"> Полей на странице
+        </div>
+    </form>
+    <div style="position: fixed; bottom: 0px; padding: 7px; background-color: white; z-index:10;">
+        <form method="Post" action="/Home/RollList">
+            <label>Стр. @ViewData["CurrentPage"]</label>
+            <input type="number" min="1" max="@ViewData["Count"]" value=@ViewData["RollsperPage"] maxlength="16" name="RollsperPage" style="margin: 0; width: 190px;">Количество полей на странице
+            <button type="submit" value=@ViewData["NextPage"] name="SkipPages" style="margin: 10px;">Вперёд</button>
+            <button type="submit" value=@ViewData["PrevPage"] name="SkipPages" style="margin: 10px;">Назад</button>
+            <button type="submit" value="0" name="SkipPages" style="margin: 10px;">В начало </button>
+            <button type="submit" value=@ViewData["LastPage"] name="SkipPages" style="margin: 10px;">В конец</button>
+        </form>
+    </div>
+    <div style="position: fixed; bottom: 30px; right: 30px; padding: 7px; z-index:10;">
+        <a href="#top"><div style="border: outset 2px gray;background-color: #f8f9fa;padding: 12px;">Наверх страницы</div></a>
+    </div>
+        <table spacing="5" style="border: 2px; margin: 5px auto; width: 100%;">
+            <tr>
+                <td>Номер броска</td>
+                <td>Результат</td>
+                <td>Граней у кости</td>
+                <td>Костей в броске</td>
+                <td>Дата броска</td>
+                <td>Имя игрока</td>
+            </tr>
+            @foreach (var fromDB in Model)
+            {
+                <tr>
+                    <td>@fromDB.Id</td>
+                    <td>@fromDB.RollResult</td>
+                    <td>@fromDB.EdgeCount</td>
+                    <td>@fromDB.DiceInRoll</td>
+                    <td>@fromDB.RollTime</td>
+                    <td>@fromDB.Player</td>
+                </tr>
+            }
+        </table>

@@ -67,7 +67,7 @@ namespace Diceroller.Controllers
                 Drop.Add(Otvet.Y);
                 using (ApplicationContext db = new ApplicationContext())  // Записываем каждый кубик в базу данных
                 {
-                    toSQL toDB = new toSQL { RollTime = DateTime.Now, RollResult = Otvet.Y, DiceInRoll = Q, EdgeCount = E, Player = Igrok };
+                    ToSQL toDB = new ToSQL { RollTime = DateTime.Now, RollResult = Otvet.Y, DiceInRoll = Q, EdgeCount = E, Player = Igrok };
                     db.DiceDB.Add(toDB);
                     db.SaveChanges();
                 }
@@ -87,11 +87,26 @@ namespace Diceroller.Controllers
             return View();
         }
 
-        public IActionResult RollList()  // Забираем данные из SQL
+        public IActionResult RollList(int SkipPages, int RollsperPage)  
         {
-            using (ApplicationContext db = new ApplicationContext())
+            using (ApplicationContext db = new ApplicationContext()) // Забираем данные из SQL
             {
-                var fromSQL = db.DiceDB.OrderByDescending(x=>x.RollTime).Take(100).ToList();
+                /* Для человекочитаемости страницы всегда идут с первой, 
+                 * поэтому будем считать, что "нулевая" это первая страница, 
+                 * заодно ошибки отсечём */
+                if (RollsperPage <= 1)
+                { RollsperPage = 100; }
+                if (SkipPages <= 0) 
+                { SkipPages = 1; } 
+                int Z = RollsperPage * --SkipPages; // Декремент, чтобы на первой/нулевой странице не пропускать записей
+                ViewData["CurrentPage"] = $"{++SkipPages}"; // Инкремент, чтобы вернуть всё в норму
+                ViewData["NextPage"] = $"{SkipPages+1}";
+                ViewData["PrevPage"] = $"{SkipPages-1}";             
+                var fromSQL = db.DiceDB.OrderByDescending(x=>x.RollTime).Skip(Z).Take(RollsperPage).ToList();
+                int countfromSQL = db.DiceDB.Count();
+                ViewData["Count"] = countfromSQL;
+                ViewData["LastPage"] = $"{((countfromSQL-(countfromSQL% RollsperPage))/ RollsperPage) +1}";
+                ViewData["RollsperPage"] = RollsperPage;
                 return View(fromSQL);
             }
         }

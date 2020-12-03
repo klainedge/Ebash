@@ -15,13 +15,14 @@ namespace Diceroller.Models
         public string Player;
     }
 }
-    public class toSQL
+public class ToSQL
 {
     [Key]
-        public int Id { get; set; }
-        public int RollResult { get; set; }
-        public int EdgeCount { get; set; }
-        public DateTime RollTime{ get; set; }
-        public int DiceInRoll { get; set; }
-        public string Player { get; set; }
+    public int Id { get; set; }
+    public int RollResult { get; set; }
+    public int EdgeCount { get; set; }
+    public DateTime RollTime { get; set; }
+    public int DiceInRoll { get; set; }
+    public string Player { get; set; }
 }
+  

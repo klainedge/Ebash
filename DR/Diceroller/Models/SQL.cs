@@ -4,8 +4,7 @@ namespace Diceroller
 {
     public class ApplicationContext : DbContext
     {
-        public DbSet<toSQL> DiceDB { get; set; }
-         
+        public DbSet<ToSQL> DiceDB { get; set; }
         public ApplicationContext()
         {
             Database.EnsureCreated();
