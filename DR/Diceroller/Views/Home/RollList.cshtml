@@ -3,35 +3,56 @@
     ViewData["Title"] = "База данных бросков";
 }
 <a name="top"></a>
-<h1>Показано @ViewData["RollsperPage"] бросков из @ViewData["Count"]</h1>
-    <form method="Post" action="/Home/RollList">
-        <div>
-            <input type="number" min="1" max=@ViewData["LastPage"] value=@ViewData["CurrentPage"] maxlength="16" name="SkipPages" style="margin: 0; width: 190px;">
-            <input type="submit" value="К указанной странице" style="margin: 0 15px 0 10px; width: 190px;">
-            <input type="number" min="1" max="@ViewData["Count"]" value=@ViewData["RollsperPage"] maxlength="16" name="RollsperPage" style="margin: 0; width: 190px;"> Полей на странице
-        </div>
-    </form>
+<h1>Показано @ViewData["RollsonPage"] бросков из @ViewData["Count"]</h1>
+<form method="Post" action="/Home/RollList">
+    <div>
+        <input type="number" min="1" value="@ViewData["CurrentPage"]" maxlength="16" name="SkipPages" style="margin: 0; width: 190px;">
+        <input type="submit" value="К указанной странице" style="margin: 0 15px 0 10px; width: 190px;">
+        <input type="number" min="1" value="@ViewData["RollsperPage"]" maxlength="16" name="RollsperPage" style="margin: 0; width: 190px;"> Полей на странице
+    </div>
+    <table style="border: 2px; margin: 5px auto; width: 100%;">
+        <tr>
+            <td style="width: 15%;">Фильтры</td>
+            <td style="width: 15%;"><input type="number" max="999" min="1" maxlength="3" name="FltrRollResult" value="@ViewData["FltrRollResult"]"></td>
+            <td style="width: 15%;"><input type="number" max="999" min="1" maxlength="3" name="FltrEdgeCount" value="@ViewData["FltrEdgeCount"]"></td>
+            <td style="width: 15%;"><input type="number" max="999" min="1" maxlength="3" name="FltrDiceInRoll" value="@ViewData["FltrDiceInRoll"]"></td>
+            <td style="width: 20%;"><input type="datetime" name="FltrRollTime" maxlength="10" value="@ViewData["FltrRollTime"]" style="width: 60%;"></td>
+            <td style="width: 20%;"><input type="text" maxlength="16" name="FltrPlayer" value="@ViewData["FltrPlayer"]"></td>
+        </tr>
+    </table>
+</form>
+<form method="Post" action="/Home/RollList">
     <div style="position: fixed; bottom: 0px; padding: 7px; background-color: white; z-index:10;">
-        <form method="Post" action="/Home/RollList">
-            <label>Стр. @ViewData["CurrentPage"]</label>
-            <input type="number" min="1" max="@ViewData["Count"]" value=@ViewData["RollsperPage"] maxlength="16" name="RollsperPage" style="margin: 0; width: 190px;">Количество полей на странице
-            <button type="submit" value=@ViewData["NextPage"] name="SkipPages" style="margin: 10px;">Вперёд</button>
-            <button type="submit" value=@ViewData["PrevPage"] name="SkipPages" style="margin: 10px;">Назад</button>
-            <button type="submit" value="0" name="SkipPages" style="margin: 10px;">В начало </button>
-            <button type="submit" value=@ViewData["LastPage"] name="SkipPages" style="margin: 10px;">В конец</button>
-        </form>
+        <label>Стр. @ViewData["CurrentPage"]</label>
+        <input type="number" min="1" max="@ViewData["MaxCount"]" value=@ViewData["RollsperPage"] maxlength="16" name="RollsperPage" style="margin: 0; width: 190px;"> Полей на странице
+        <button type="submit" value="@ViewData["NextPage"]" name="SkipPages" style="margin: 10px;">Следущая</button>
+        <button type="submit" value="@ViewData["PrevPage"]" name="SkipPages" style="margin: 10px;">Предыдущая</button>
+        <button type="submit" value="0" name="SkipPages" style="margin: 10px;">Первая</button>
+        <button type="submit" value="@ViewData["LastPage"]" name="SkipPages" style="margin: 10px;">Последняя</button>
     </div>
-    <div style="position: fixed; bottom: 30px; right: 30px; padding: 7px; z-index:10;">
-        <a href="#top"><div style="border: outset 2px gray;background-color: #f8f9fa;padding: 12px;">Наверх страницы</div></a>
-    </div>
-        <table spacing="5" style="border: 2px; margin: 5px auto; width: 100%;">
+        <table style="position: fixed; bottom: -2000px; padding: 7px; background-color: white; z-index:10;">
             <tr>
-                <td>Номер броска</td>
-                <td>Результат</td>
-                <td>Граней у кости</td>
-                <td>Костей в броске</td>
-                <td>Дата броска</td>
-                <td>Имя игрока</td>
+                <td style="width: 15%;">Фильтры</td>
+                <td style="width: 15%;"><input type="number" max="999" min="1" maxlength="3" name="FltrRollResult" value="@ViewData["FltrRollResult"]"></td>
+                <td style="width: 15%;"><input type="number" max="999" min="1" maxlength="3" name="FltrEdgeCount" value="@ViewData["FltrEdgeCount"]"></td>
+                <td style="width: 15%;"><input type="number" max="999" min="1" maxlength="3" name="FltrDiceInRoll" value="@ViewData["FltrDiceInRoll"]"></td>
+                <td style="width: 20%;"><input type="datetime" name="FltrRollTime" maxlength="10" value="@ViewData["FltrRollTime"]" style="width: 60%;"></td>
+                <td style="width: 20%;"><input type="text" maxlength="16" name="FltrPlayer" value="@ViewData["FltrPlayer"]"></td>
+            </tr>
+        </table>
+</form>
+    
+    <div style="position: fixed; bottom: 30px; right: 30px; padding: 7px; z-index:10;">
+        <a href="#top"><div style="border: outset 2px gray;background-color: #f8f9fa;padding: 12px;">Наверх</div></a>
+    </div>
+        <table style="border: 2px; margin: 5px auto; width: 100%;">
+            <tr>
+                <td style="width: 15%;">Номер броска</td>
+                <td style="width: 15%;">Результат</td>
+                <td style="width: 15%;">Граней у кости</td>
+                <td style="width: 15%;">Костей в броске</td>
+                <td style="width: 20%;">Дата броска</td>
+                <td style="width: 20%;">Имя игрока</td>
             </tr>
             @foreach (var fromDB in Model)
             {

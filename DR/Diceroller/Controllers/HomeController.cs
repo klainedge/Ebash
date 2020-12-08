@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Diceroller.Models;
+using System.Globalization;
 
 namespace Diceroller.Controllers
 {
@@ -87,26 +88,75 @@ namespace Diceroller.Controllers
             return View();
         }
 
-        public IActionResult RollList(int SkipPages, int RollsperPage)  
+        public IActionResult RollList(int SkipPages, int RollsperPage, int FltrRollResult, int FltrEdgeCount, int FltrDiceInRoll, string FltrRollTime, string FltrPlayer)  
         {
             using (ApplicationContext db = new ApplicationContext()) // Забираем данные из SQL
             {
+                var query = db.DiceDB.Where(p => p.Player.Contains($"{FltrPlayer}"));
+                if  (FltrPlayer != null)
+                { ViewData["FltrPlayer"] = FltrPlayer; }
+                if (FltrRollResult > 0)
+                { query = query.Where(p => p.RollResult.Equals(FltrRollResult));
+                    ViewData["FltrRollResult"] = FltrRollResult;
+                }
+                if (FltrEdgeCount > 0)
+                { query = query.Where(p => p.EdgeCount.Equals(FltrEdgeCount));
+                    ViewData["FltrEdgeCount"] = FltrEdgeCount;
+                }
+                if (FltrDiceInRoll > 0)
+                { query = query.Where(p => p.DiceInRoll.Equals(FltrDiceInRoll));
+                    ViewData["FltrDiceInRoll"] = FltrDiceInRoll;
+                }
+                DateTime SQLtime;
+                if (FltrRollTime != null)
+                {
+                    if (DateTime.TryParseExact(FltrRollTime, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out SQLtime))
+                    {
+                        SQLtime = DateTime.ParseExact(FltrRollTime, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+                        query = query.Where(p => p.RollTime.Date == SQLtime.Date);
+                        ViewData["FltrRollTime"] = FltrRollTime.Substring(0, 10);
+                    }
+                    else
+                    {
+                        ViewData["FltrRollTime"] = "DD.MM.YYYY";
+                    }
+
+                }
+                else
+                {
+                    ViewData["FltrRollTime"] = "DD.MM.YYYY";
+                }
                 /* Для человекочитаемости страницы всегда идут с первой, 
                  * поэтому будем считать, что "нулевая" это первая страница, 
                  * заодно ошибки отсечём */
                 if (RollsperPage <= 1)
                 { RollsperPage = 100; }
                 if (SkipPages <= 0) 
-                { SkipPages = 1; } 
-                int Z = RollsperPage * --SkipPages; // Декремент, чтобы на первой/нулевой странице не пропускать записей
-                ViewData["CurrentPage"] = $"{++SkipPages}"; // Инкремент, чтобы вернуть всё в норму
-                ViewData["NextPage"] = $"{SkipPages+1}";
-                ViewData["PrevPage"] = $"{SkipPages-1}";             
-                var fromSQL = db.DiceDB.OrderByDescending(x=>x.RollTime).Skip(Z).Take(RollsperPage).ToList();
-                int countfromSQL = db.DiceDB.Count();
+                { SkipPages = 1; }
+                int countfromSQL = query.Count();
+                int LastPage = ((countfromSQL - (countfromSQL % RollsperPage)) / RollsperPage) + 1;
+                if (SkipPages * RollsperPage > countfromSQL) // Ensure you won't get blank page
+                { SkipPages = LastPage; }
+                int Z = RollsperPage * --SkipPages; //Decrement for Computer
+                ViewData["CurrentPage"] = ++SkipPages; //Increment for Human
+                ViewData["NextPage"] = SkipPages + 1;
+                ViewData["PrevPage"] = SkipPages - 1;
+                var fromSQL = query
+                  .OrderByDescending(p => p.RollTime)
+                  .Skip(Z)
+                  .Take(RollsperPage)
+                  .ToList();
                 ViewData["Count"] = countfromSQL;
-                ViewData["LastPage"] = $"{((countfromSQL-(countfromSQL% RollsperPage))/ RollsperPage) +1}";
+                if (countfromSQL < 100)
+                { ViewData["MaxCount"] = 100; }
+                else
+                { ViewData["MaxCount"] = countfromSQL; }
+                ViewData["LastPage"] = LastPage;
                 ViewData["RollsperPage"] = RollsperPage;
+                if (SkipPages != LastPage)
+                { ViewData["RollsonPage"] = RollsperPage;  }
+                else 
+                { ViewData["RollsonPage"] = countfromSQL % RollsperPage; }
                 return View(fromSQL);
             }
         }
