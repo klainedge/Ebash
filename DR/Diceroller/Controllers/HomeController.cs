@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using Diceroller.Models;
 using System.Globalization;
 
@@ -92,19 +91,25 @@ namespace Diceroller.Controllers
         {
             using (ApplicationContext db = new ApplicationContext()) // Забираем данные из SQL
             {
-                var query = db.DiceDB.Where(p => p.Player.Contains($"{FltrPlayer}"));
+                IQueryable <ToSQL> query = db.DiceDB;
                 if  (FltrPlayer != null)
-                { ViewData["FltrPlayer"] = FltrPlayer; }
+                {
+                    query = query.Where(p => p.Player.Contains($"{FltrPlayer}"));
+                    ViewData["FltrPlayer"] = FltrPlayer; 
+                }
                 if (FltrRollResult > 0)
-                { query = query.Where(p => p.RollResult.Equals(FltrRollResult));
+                { 
+                    query = query.Where(p => p.RollResult.Equals(FltrRollResult));
                     ViewData["FltrRollResult"] = FltrRollResult;
                 }
                 if (FltrEdgeCount > 0)
-                { query = query.Where(p => p.EdgeCount.Equals(FltrEdgeCount));
+                { 
+                    query = query.Where(p => p.EdgeCount.Equals(FltrEdgeCount));
                     ViewData["FltrEdgeCount"] = FltrEdgeCount;
                 }
                 if (FltrDiceInRoll > 0)
-                { query = query.Where(p => p.DiceInRoll.Equals(FltrDiceInRoll));
+                { 
+                    query = query.Where(p => p.DiceInRoll.Equals(FltrDiceInRoll));
                     ViewData["FltrDiceInRoll"] = FltrDiceInRoll;
                 }
                 DateTime SQLtime;
