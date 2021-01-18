@@ -57,7 +57,7 @@
             @foreach (var fromDB in Model)
             {
                 <tr>
-                    <td>@fromDB.Id</td>
+                    <td><a href="/Home/Display/?ID=@fromDB.Id">@fromDB.Id</a></td>
                     <td>@fromDB.RollResult</td>
                     <td>@fromDB.EdgeCount</td>
                     <td>@fromDB.DiceInRoll</td>

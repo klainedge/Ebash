@@ -29,6 +29,25 @@ namespace Diceroller.Controllers
             Otvet.E = 6;
             return View(Otvet);
         }
+        public IActionResult Display(int ID, string Igrok, string Password)
+        {
+            using (ApplicationContext db = new ApplicationContext()) // Забираем данные из SQL
+            {
+                IQueryable<ToSQL> query = db.DiceDB;
+                if (ID < 1)
+                { 
+                    ID = 1;
+                    ViewData["Error"] = " не найдена"; 
+                }
+                var Individual = query.FirstOrDefault(x => x.Id == ID);
+                if (Password == "iNe3dA#th0riza71onPol1cy")
+                { 
+                    Individual.Player = Igrok;
+                    db.SaveChanges();
+                }
+                return View("Display", Individual);
+            }
+        }
 
         public IActionResult Roll(int Q, int E, string Igrok)
         {

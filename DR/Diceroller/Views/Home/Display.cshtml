@@ -1,0 +1,28 @@
+﻿@model ToSQL
+@{
+    ViewData["Title"] = "Данные Броска";
+}
+<p>Запрошенная запись @ViewData["Error"]</p>
+<table style="border: 2px; margin: 5px auto; width: 100%;">
+    <tr>
+        <td style="width: 15%;">@Model.Id</td>
+        <td style="width: 15%;">@Model.RollResult</td>
+        <td style="width: 15%;">@Model.EdgeCount</td>
+        <td style="width: 15%;">@Model.DiceInRoll</td>
+        <td style="width: 20%;">@Model.RollTime</td>
+        <td style="width: 20%;">@Model.Player</td>
+    </tr>
+</table>
+<form method="POST" action="/Home/Display/?ID=@Model.Id">
+    <div style="margin: 0 0 10px 0;">
+        <p>Новое имя игрока</p>
+        <input type="text" value="@Model.Player" maxlength="16" name="Igrok">
+    </div>
+    <div style="margin: 0 0 10px 0;">
+        <p>Пароль</p>
+        <input type="text" value="" maxlength="40" name="Password">
+    </div>
+    <div style="margin: 0 0 10px 0;">
+        <input type="submit" value="Сменить Ник">
+    </div>
+</form>

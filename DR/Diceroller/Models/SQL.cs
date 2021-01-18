@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
+
 namespace Diceroller
 {
     public class ApplicationContext : DbContext
