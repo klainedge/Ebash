@@ -5,7 +5,7 @@
 
 <div class="text-center">
     <h1 class="display-4">Анохин Максим</h1>
-    <p>Кидалка кубиков, собранная на <a href="https://docs.microsoft.com/aspnet/core">ASP.NET Core</a>.</p>
+    <p>Эмулятор рандома с кубиками, собранная на <a href="https://docs.microsoft.com/aspnet/core">ASP.NET Core</a>.</p>
     <label>@ViewData["roller"]</label>
     <Table style="font-size: 3vw; margin: auto; width: 100%;"> 
         <tr>
@@ -40,7 +40,7 @@
     <p>@Model.Avg</p>
     <form method="POST" action="/Home/Roll">
         <div style="margin: 0 0 10px 0;">
-            <p>Количество кубиков</p>
+            <p>Количество игральных костей</p>
             <input type="number" max="999" min="1" maxlength="3" value="@Model.Q" name="Q">
         </div>
         <div style="margin: 0 0 10px 0;">
